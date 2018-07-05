@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+<h:head></h:head>
+<h:body>
+
+    <p:button value="←" outcome="Deliveries.xhtml"/>
+    <p:separator />
+    <p:panel header="Таблица стран-производителей" id="panell">
+
+        <p:accordionPanel id="accpanel" multiple="true">
+            <p:tab title="Страны" id="tab2" closable="true">
+                <h:form id="form1">
+
+                    <p:growl id="msgs" showDetail="true"/>
+
+                    <p:dataTable id="cat1" var="goody" value="#{countryDAO.list}" editable="true" rowKey="#{goody.id}" selection="#{countryDAO.selectedRow}" selectionMode="single" style="margin-bottom:20px">
+                        <!--<p:dataTable id="cat1" var="category" value="#{categDAO.list}" editable="true" style="margin-bottom:20px">-->
+                        <f:facet name="header">
+                           Страны
+                        </f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{countryDAO.onRowEdit}" update="accpanel:form1:msgs"  />
+                        <p:ajax event="rowEditCancel" listener="#{countryDAO.onRowCancel}" update="accpanel:form1:msgs" />
+
+
+                        <p:column headerText="Код страны">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.code}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{goody.code}" style="width:100%" label="codec"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Наименование страны">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.name}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{goody.name}" style="width:100%" label="name"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="2-бкв. сокращение">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.doubled}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{goody.doubled}" style="width:100%" label="socrtwo"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="3-бкв. сокращение">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.triple}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{goody.triple}" style="width:100%" label="socrthr"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column style="width:32px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:contextMenu for="cat1" widgetVar="cMenu">
+
+                        <p:menuitem value="Удалить" update="cat1" icon="ui-icon-close" actionListener="#{countryDAO.delete}"/>
+                    </p:contextMenu>
+
+                </h:form>
+            </p:tab>
+            <p:tab title="Добавить страну">
+                <h:form>
+                    <p:remoteCommand id="myfun" name="myfun" action="#{countryDAO.addCountry}" update="" />
+                    <p:panelGrid columns="2">
+                        <f:facet name="header">
+                            Страна-производитель
+                        </f:facet>
+                        <h:outputLabel for="size_name" value="Код страны: " />
+                        <p:inputText id="size_name" value="#{countryDAO.code}" label="Firstname" />
+                        <h:outputLabel for="con_name" value="Наименование страны: " />
+                        <p:inputText id="con_name" value="#{countryDAO.name}" label="Firstname" />
+                        <h:outputLabel for="men_size" value="2-бкв. сокращение: " />
+                        <p:inputText id="men_size" value="#{countryDAO.doubled}" label="Surname"/>
+                        <h:outputLabel for="women_size" value="3-бкв. сокращение: " />
+                        <p:inputText id="women_size" value="#{countryDAO.triple}" label="Surname"/>
+                    </p:panelGrid>
+                    <br/>
+                    <h:commandButton value="Добавить" onclick="myfun();"  />
+                </h:form>
+
+
+            </p:tab>
+
+        </p:accordionPanel>
+    </p:panel>
+</h:body>
+</html>

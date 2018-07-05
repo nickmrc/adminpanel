@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+<h:head></h:head>
+<h:body>
+
+    <p:button value="←" outcome="AdminPanel.xhtml"/>
+    <p:separator />
+    <p:panel header="Прайс-лист" id="panell">
+
+
+
+
+        <p:accordionPanel id="accpanel" multiple="true">
+            <p:tab title="Прайс-лист"  closable="true">
+                <h:form id="form1">
+
+                    <p:growl id="msgs" showDetail="true"/>
+
+                    <p:dataTable id="cat1" var="goody" value="#{priceDAO.list}" editable="true" rowKey="#{goody.id}" selection="#{priceDAO.selectedRow}" selectionMode="single" style="margin-bottom:20px">
+
+                    <!--<p:dataTable id="cat1" var="goody" value="#{goodDAO.list}" editable="true" editMode="cell" rowKey="#{goody.id}" selection="#{goodDAO.selectedRow}" selectionMode="single" style="margin-bottom:20px">-->
+
+                        <!--<p:dataTable id="cat1" var="category" value="#{categDAO.list}" editable="true" style="margin-bottom:20px">-->
+                        <f:facet name="header">
+                            Позиции
+                        </f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{priceDAO.onRowEdit}" update="accpanel:form1:msgs"  />
+                        <p:ajax event="rowEditCancel" listener="#{priceDAO.onRowCancel}" update="accpanel:form1:msgs" />
+                        <!--<p:ajax event="cellEdit" listener="#{goodDAO.onCellEdit}" update="accpanel:form1:msgs" />-->
+
+                        <p:column headerText="ID">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.id}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="modelInput" value="#{goody.id}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+
+                        <p:column headerText="Товар">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.good}" /></f:facet>
+                                <f:facet name="input">
+                                    <h:selectOneMenu value="#{priceDAO.goodch}" style="width:100%">
+                                        <!--<f:selectItem itemLabel="Выбрать" itemValue="#{null}" />-->
+                                        <f:selectItems value="#{priceDAO.goods}" var="coni" itemLabel="#{coni.name}" itemValue="#{coni.id}" />
+                                    </h:selectOneMenu>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Цена, коп.">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.price}" /></f:facet>
+                                <f:facet name="input">
+                                    <p:inputNumber id="B" value="#{goody.price}" label="enam" minValue="0" maxValue="40000" decimalPlaces="0" />
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Дата">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.dated}" /></f:facet>
+                                <f:facet name="input">
+                                    <p:calendar id="mask" value="#{goody.dated}" pattern="dd-MM-yyyy" mask="true" />
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+
+                        <p:column style="width:32px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:contextMenu for="cat1" widgetVar="cMenu">
+
+                        <p:menuitem value="Удалить" update="cat1" icon="ui-icon-close" actionListener="#{priceDAO.delete}"/>
+                    </p:contextMenu>
+
+                </h:form>
+            </p:tab>
+            <p:tab title="Добавить позицию">
+                <h:form>
+                    <p:remoteCommand id="myfun" name="myfun" action="#{priceDAO.addItem}" update="" />
+                    <p:panelGrid columns="2">
+                        <f:facet name="header">
+                            Позиция
+                        </f:facet>
+
+
+                        <h:outputLabel  value="Товар: " />
+                        <h:selectOneMenu value="#{priceDAO.goodch}" style="width:100%">
+                            <f:selectItem itemLabel="Выбрать" itemValue="#{null}" />
+                            <f:selectItems value="#{priceDAO.goods}" var="man" itemLabel="#{man.name}" itemValue="#{man.id}" />
+                        </h:selectOneMenu>
+
+                        <p:outputLabel for="maskk" value="Дата:" />
+                        <p:calendar id="maskk" value="#{priceDAO.dated}" pattern="dd-MM-yyyy" mask="true" />
+
+                        <h:outputLabel for="count" value="Цена, коп.: " />
+                        <p:inputText id="count" value="#{priceDAO.price}" label="Firstname" />
+                    </p:panelGrid>
+
+                    <!--<h:selectOneMenu value="#{goodDAO.categorych}" style="width:100%">-->
+                        <!--<f:selectItem itemLabel="Выбрать" itemValue="#{null}" />-->
+                        <!--<f:selectItems value="#{goodDAO.categories}" var="man" itemLabel="#{man.name}" itemValue="#{man.id}" />-->
+                    <!--</h:selectOneMenu>-->
+
+                    <br/>
+                    <h:commandButton value="Добавить" onclick="myfun();"  />
+                </h:form>
+
+
+            </p:tab>
+
+        </p:accordionPanel>
+    </p:panel>
+</h:body>
+</html>

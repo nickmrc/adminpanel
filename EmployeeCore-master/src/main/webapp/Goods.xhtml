@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+<h:head></h:head>
+<h:body>
+
+    <p:button value="←" outcome="AdminPanel.xhtml"/>
+    <p:separator />
+    <p:panel header="Товары" id="panell">
+
+
+
+
+        <p:accordionPanel id="accpanel" multiple="true">
+            <p:tab title="Все товары"  closable="true">
+                <h:form id="form1">
+
+                    <p:growl id="msgs" showDetail="true"/>
+
+                    <p:dataTable id="cat1" var="goody" value="#{goodDAO.list}" editable="true" emptyMessage="Не найдено" filteredValue="#{goodDAO.filtredlist}"
+                                 rowKey="#{goody.id}" selection="#{goodDAO.selectedRow}" selectionMode="single" style="margin-bottom:40px" widgetVar="carsTable">
+
+
+                    <!--<p:dataTable id="cat1" var="goody" value="#{goodDAO.list}" editable="true" editMode="cell" rowKey="#{goody.id}" selection="#{goodDAO.selectedRow}" selectionMode="single" style="margin-bottom:20px">-->
+
+                        <!--<p:dataTable id="cat1" var="category" value="#{categDAO.list}" editable="true" style="margin-bottom:20px">-->
+                        <!--<f:facet name="header">-->
+                            <!--Товары-->
+                        <!--</f:facet>-->
+
+                        <f:facet name="header">
+                            <p:outputPanel style="text-align: right">
+                                <h:outputText value="Поиск по всем полям:  " style="font-size: 16px; "/>
+                                <p:inputText id="globalFilter" onkeyup="PF('carsTable').filter()" style="width:175px;  font-size: 15px; "  placeholder="Введите ключевое слово" />
+                            </p:outputPanel>
+                        </f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{goodDAO.onRowEdit}" update="accpanel:form1:msgs"  />
+                        <p:ajax event="rowEditCancel" listener="#{goodDAO.onRowCancel}" update="accpanel:form1:msgs" />
+                        <!--<p:ajax event="cellEdit" listener="#{goodDAO.onCellEdit}" update="accpanel:form1:msgs" />-->
+
+
+                        <!--<p:column filterBy="#{car.id}" headerText="Id" footerText="contains" filterMatchMode="contains">-->
+                            <!--<h:outputText value="#{car.id}" />-->
+                        <!--</p:column>-->
+
+                        <p:column filterBy="#{goody.id}" headerText="ID"  filterMatchMode="contains" filterStyle="width:95%" style="font-size: 16px; vertical-align: top;">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.id}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="modelInput" value="#{goody.id}" style="width:95%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column filterBy="#{goody.name}" filterMatchMode="contains" headerText="Название" filterStyle="width:95%" style="font-size: 16px; vertical-align: top;">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.name}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{goody.name}" style="width:95%" label="name"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column filterBy="#{goody.vendorcode}" filterMatchMode="contains" headerText="Артикул" filterStyle="width:95%" style="font-size: 16px; vertical-align: top;">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.vendorcode}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{goody.vendorcode}" style="width:95%" label="arti"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+
+                        <p:column filterBy="#{goody.producer}" filterMatchMode="exact" headerText="Страна" filterStyle="width:95%" style="font-size: 16px; vertical-align: top;">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('carsTable').filter()" style="width:70% ; font-size: 16px;">
+                                    <f:selectItem itemLabel="Выбрать" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItems value="#{goodDAO.countryProducers}" />
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.producer}" /></f:facet>
+                                <f:facet name="input">
+                                    <h:selectOneMenu value="#{goodDAO.producerch}" style="width:95%">
+                                        <!--<f:selectItem itemLabel="Выбрать" itemValue="#{null}" />-->
+                                        <f:selectItems value="#{goodDAO.countryProducers}" var="coni" itemLabel="#{coni.name}" itemValue="#{coni.id}" />
+                                    </h:selectOneMenu>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+
+                        <p:column filterBy="#{goody.category}" filterMatchMode="exact" headerText="Категория" filterStyle="width:95%" style="font-size: 16px; vertical-align: top;">
+
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('carsTable').filter()" style="width:70% ; font-size: 16px;">
+                                    <f:selectItem itemLabel="Выбрать" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItems value="#{goodDAO.categories}" />
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.category}" /></f:facet>
+                                <f:facet name="input">
+                                    <h:selectOneMenu value="#{goodDAO.categorych}" style="width:95%">
+
+                                        <f:selectItems value="#{goodDAO.categories}" var="cate" itemLabel="#{cate.name}" itemValue="#{cate.id}" />
+
+                                    </h:selectOneMenu>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+
+                        <p:column filterBy="#{goody.color}" filterMatchMode="exact" headerText="Цвет" filterStyle="width:95%" style="font-size: 16px; vertical-align: top;">
+
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('carsTable').filter()" style="width:70% ; font-size: 16px;">
+                                    <f:selectItem itemLabel="Выбрать" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItems value="#{goodDAO.colors}" />
+                                </p:selectOneMenu>
+                            </f:facet>
+
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.color}" /></f:facet>
+                                <f:facet name="input">
+                                    <h:selectOneMenu value="#{goodDAO.colorch}" style="width:95%">
+
+                                        <f:selectItems value="#{goodDAO.colors}" var="colo" itemLabel="#{colo.name}" itemValue="#{colo.id}" />
+
+                                    </h:selectOneMenu>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column filterBy="#{goody.size}" filterMatchMode="exact" headerText="Размер" filterStyle="width:95%" style="font-size: 16px; vertical-align: top;" >
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('carsTable').filter()" style="width:70% ; font-size: 16px;" >
+                                    <f:selectItem itemLabel="Выбрать"  itemValue="#{null}" noSelectionOption="true"  />
+                                    <f:selectItems value="#{goodDAO.sizes}" />
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.size}" /></f:facet>
+                                <f:facet name="input">
+                                    <h:selectOneMenu value="#{goodDAO.sizech}" style="width:95%">
+
+                                        <f:selectItems value="#{goodDAO.sizes}" var="siz" itemLabel="#{siz.name}" itemValue="#{siz.id}" />
+                                    </h:selectOneMenu>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+
+                        <p:column headerText="Описание" filterBy="#{goody.discription}" filterStyle="width:95%" style="font-size: 16px; vertical-align: top;">
+                            <p:cellEditor>
+                                <f:facet name="output" style="width:70% ; font-size: 16px;"><h:outputText value="#{goody.discription}" /></f:facet>
+                                <f:facet name="input" style="width:70% ; font-size: 16px;"><p:inputText value="#{goody.discription}" style="width:95%" label="description"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column  sortBy="#{goody.count}" headerText="Количество" style=" font-size: 16px; vertical-align: top; ">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.count}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{goody.count}" style="width:95%" label="quant"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+
+                        <p:column style="width:32px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:contextMenu for="cat1" widgetVar="cMenu">
+
+                        <p:menuitem value="Удалить" update="cat1" icon="ui-icon-close" actionListener="#{goodDAO.delete}"/>
+                    </p:contextMenu>
+
+                </h:form>
+            </p:tab>
+            <p:tab title="Добавить товар">
+                <h:form id="lolik">
+                    <p:remoteCommand id="myfun" name="myfun" action="#{goodDAO.addGood}" update="" />
+                    <p:panelGrid columns="2">
+                        <f:facet name="header">
+                            Товар
+                        </f:facet>
+                        <h:outputLabel for="good_name" value="Название: " />
+                        <p:inputText id="good_name" value="#{goodDAO.name}" label="Firstname" />
+                        <h:outputLabel for="vendor" value="Артикул: " />
+                        <p:inputText id="vendor" value="#{goodDAO.vendorcode}" label="Firstname" />
+                        <h:outputLabel  value="Страна-производитель: " />
+                        <h:selectOneMenu value="#{goodDAO.producerch}" style="width:95%">
+                            <f:selectItem itemLabel="Выбрать" itemValue="#{null}" />
+                            <f:selectItems value="#{goodDAO.countryProducers}" var="man" itemLabel="#{man.name}" itemValue="#{man.id}" />
+                        </h:selectOneMenu>
+                        <h:outputLabel  value="Категория: " />
+                        <h:selectOneMenu value="#{goodDAO.categorych}" style="width:95%">
+                            <f:selectItem itemLabel="Выбрать" itemValue="#{null}" />
+                            <f:selectItems value="#{goodDAO.categories}" var="man" itemLabel="#{man.name}" itemValue="#{man.id}" />
+                        </h:selectOneMenu>
+                        <h:outputLabel  value="Цвет: " />
+                        <h:selectOneMenu value="#{goodDAO.colorch}" style="width:95%">
+                            <f:selectItem itemLabel="Выбрать" itemValue="#{null}" />
+                            <f:selectItems value="#{goodDAO.colors}" var="coll" itemLabel="#{coll.name}" itemValue="#{coll.id}" />
+                        </h:selectOneMenu>
+                        <h:outputLabel  value="Размер: " />
+                        <h:selectOneMenu value="#{goodDAO.sizech}" style="width:95%">
+                            <f:selectItem itemLabel="Выбрать" itemValue="#{null}" />
+                            <f:selectItems value="#{goodDAO.sizes}" var="man" itemLabel="#{man.name}" itemValue="#{man.id}" />
+                        </h:selectOneMenu>
+                        <h:outputLabel for="good_description" value="Описание: " />
+                        <p:inputTextarea id="good_description" value="#{goodDAO.description}" label="Surname"/>
+                        <h:outputLabel for="count" value="Количество: " />
+                        <p:inputText id="count" value="#{goodDAO.count}" label="Firstname" />
+                    </p:panelGrid>
+
+                    <!--<h:selectOneMenu value="#{goodDAO.categorych}" style="width:100%">-->
+                        <!--<f:selectItem itemLabel="Выбрать" itemValue="#{null}" />-->
+                        <!--<f:selectItems value="#{goodDAO.categories}" var="man" itemLabel="#{man.name}" itemValue="#{man.id}" />-->
+                    <!--</h:selectOneMenu>-->
+
+                    <br/>
+                    <h:commandButton value="Добавить" onclick="myfun();"  />
+                </h:form>
+
+
+            </p:tab>
+
+        </p:accordionPanel>
+    </p:panel>
+</h:body>
+</html>

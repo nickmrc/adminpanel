@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+<h:head></h:head>
+<h:body>
+
+    <!--<div style="height:500px">-->
+    <!--<h:form>-->
+        <!--<p:growl id="msgs" showDetail="true" />-->
+
+        <!--<p:dashboard id="board" model="#{dashboardView.model}" >-->
+            <!--<p:ajax event="reorder" update="msgs" />-->
+
+            <!--<p:panel id="sports" header="Sports">-->
+                <!--<p:button value="Категории" outcome="Categories.xhtml">-->
+                <!--</p:button>-->
+            <!--</p:panel>-->
+
+            <!--<p:panel id="finance" header="Finance">-->
+                <!--<p:button value="Товары" outcome="Goods.xhtml">-->
+                <!--</p:button>-->
+            <!--</p:panel>-->
+
+        <!--</p:dashboard>-->
+
+        <!--<div style="clear:both" />-->
+    <!--</h:form>-->
+    <!--</div>-->
+
+    <p:panel header="e-commerce | Панель администратора" style="background-color: ivory">
+
+        <p:panelGrid columns="3" style="background-color: lightblue">
+            <p:button value="Категории" outcome="Categories.xhtml"  style="width:210px; background-color: honeydew"/>
+            <p:button value="Товары" outcome="Goods.xhtml" style="width:210px; background-color: honeydew"/>
+
+            <p:button value="Таблица размеров" outcome="Sizes.xhtml" style="width:210px; background-color: honeydew"/>
+            <p:button value="Поставки" outcome="Deliveries.xhtml" style="width:210px ; background-color: honeydew"/>
+
+            <p:button value="Прайс-лист" outcome="PriceList.xhtml" style="width:210px; background-color: honeydew"/>
+            <p:button value="Таблица цветов" outcome="Colors.xhtml" style="width:210px; background-color: honeydew"/>
+
+
+        </p:panelGrid>
+
+    </p:panel>
+
+</h:body>
+
+</html>

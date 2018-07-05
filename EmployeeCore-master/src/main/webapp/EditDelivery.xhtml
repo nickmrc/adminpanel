@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+<h:head></h:head>
+<h:body>
+
+    <p:button value="←" outcome="Deliveries.xhtml"/>
+    <p:separator />
+
+    <p:panel header="Добавить поставку" id="panell">
+
+        <h:form id="form2">
+
+            <p:growl id="msgs" showDetail="true"/>
+
+                    <p:dataTable id="cat1" var="goody" value="#{deliveryDAO.goodsInDelivery}" editable="true" rowKey="#{goody.id}" selection="#{deliveryDAO.selectedRow}" selectionMode="single" style="margin-bottom:20px">
+
+                    <!--<p:dataTable id="cat1" var="goody" value="#{goodDAO.list}" editable="true" editMode="cell" rowKey="#{goody.id}" selection="#{goodDAO.selectedRow}" selectionMode="single" style="margin-bottom:20px">-->
+
+                        <!--<p:dataTable id="cat1" var="category" value="#{categDAO.list}" editable="true" style="margin-bottom:20px">-->
+                        <f:facet name="header">
+                            Товары
+                        </f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{deliveryDAO.onRowEdit}" update="form2:msgs"  />
+                        <p:ajax event="rowEditCancel" listener="#{deliveryDAO.onRowCancel}" update="form2:msgs" />
+                        <!--<p:ajax event="cellEdit" listener="#{goodDAO.onCellEdit}" update="accpanel:form1:msgs" />-->
+
+                        <!--<p:column headerText="ID">-->
+                            <!--<p:cellEditor>-->
+                                <!--<f:facet name="output"><h:outputText value="#{goody.id}" /></f:facet>-->
+                                <!--<f:facet name="input"><p:inputText id="modelInput" value="#{goody.id}" style="width:100%"/></f:facet>-->
+                            <!--</p:cellEditor>-->
+                        <!--</p:column>-->
+
+                        <p:column headerText="Товар">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.good}" /></f:facet>
+                                <f:facet name="input">
+                                    <h:selectOneMenu value="#{deliveryDAO.goodch}" style="width:100%">
+                                        <!--<f:selectItem itemLabel="Выбрать" itemValue="#{null}" />-->
+                                        <f:selectItems value="#{deliveryDAO.goods}" var="goods" itemLabel="#{goods.name}" itemValue="#{goods.id}" />
+                                    </h:selectOneMenu>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Цена">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.price}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{goody.price}" style="width:100%" label="quant"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Ед.">
+                            <h:outputText id="ed" value="шт."   />
+                        </p:column>
+
+                        <p:column headerText="Количество">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.quantity}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{goody.quantity}" style="width:100%" label="description"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Стоимость">
+                                <h:outputText value="#{deliveryDAO.sum}" />
+                        </p:column>
+
+
+
+
+                        <p:column style="width:32px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+                    <p:contextMenu for="cat1" widgetVar="cMenu">
+
+                        <p:menuitem value="Удалить" update="cat1" icon="ui-icon-close" actionListener="#{deliveryDAO.delete}"/>
+                    </p:contextMenu>
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <h:commandButton value="+Добавить позицию"  update="form2:msgs" styleClass="ui-priority-primary"
+                                             action="#{deliveryDAO.addGoodInDelivery()}" />
+                        </div>
+                    </div>
+
+
+            <p:separator />
+                </h:form>
+
+        <h:form id="form1" >
+
+            <p:remoteCommand id="myfun" name="myfun" action="#{deliveryDAO.addDelivery}" update="" />
+            <p:panelGrid columns="2" id="non">
+                <f:facet name="header">
+                    Договор
+                </f:facet>
+                <h:outputLabel for="contractnum" value="№ договора: " />
+                <p:inputText id="contractnum" value="#{deliveryDAO.contractnumber}" label="Firstname"  />
+                <p:outputLabel for="conclusiondate" value="Дата заключения:" />
+                <p:calendar id="conclusiondate" value="#{deliveryDAO.conclusiondate}" pattern="dd-MM-yyyy" mask="true" />
+                <p:outputLabel for="deliverydate" value="Дата поставки:" />
+                <p:calendar id="deliverydate" value="#{deliveryDAO.deliverydate}" pattern="dd-MM-yyyy" mask="true" />
+                <h:outputLabel  value="Контрагент: " />
+                <h:selectOneMenu value="#{deliveryDAO.contrAgentch}" style="width:100%">
+                    <f:selectItem itemLabel="Выбрать" itemValue="#{null}" />
+                    <f:selectItems value="#{deliveryDAO.contrAgents}" var="agent" itemLabel="#{agent.toString}" itemValue="#{agent.id}" />
+                </h:selectOneMenu>
+            </p:panelGrid>
+
+            <p:separator />
+            <h:button value="Оформить поставку" type="submit" update=""  onclick="myfun();  " outcome="AddDelivery.xhtml"  />
+
+
+
+
+
+        </h:form>
+    </p:panel>
+</h:body>
+</html>

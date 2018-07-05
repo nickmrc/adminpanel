@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+<h:head></h:head>
+<h:body>
+    <p:button value="←" outcome="Deliveries.xhtml"/>
+    <p:separator />
+    <p:panel header="Типы организаций" id="panell">
+        <p:accordionPanel id="accpanel" multiple="true">
+            <p:tab title="Типы организаций" id="tab2" closable="true">
+                <h:form id="form1">
+
+                    <p:growl id="msgs" showDetail="true"/>
+
+                    <p:dataTable id="cat1" var="goody" value="#{legalDAO.list}" editable="true" rowKey="#{goody.id}" selection="#{legalDAO.selectedRow}" selectionMode="single" style="margin-bottom:20px">
+                        <!--<p:dataTable id="cat1" var="category" value="#{categDAO.list}" editable="true" style="margin-bottom:20px">-->
+                        <f:facet name="header">
+                            Типы организаций
+                        </f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{legalDAO.onRowEdit}" update="accpanel:form1:msgs"  />
+                        <p:ajax event="rowEditCancel" listener="#{legalDAO.onRowCancel}" update="accpanel:form1:msgs" />
+
+
+                        <p:column headerText="ID">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.id}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="modelInput" value="#{goody.id}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Название">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.name}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{goody.name}" style="width:100%" label="name"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Аббревиатура">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{goody.acronym}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{goody.acronym}" style="width:100%" label="description"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column style="width:32px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:contextMenu for="cat1" widgetVar="cMenu">
+
+                        <p:menuitem value="Удалить" update="cat1" icon="ui-icon-close" actionListener="#{legalDAO.delete}"/>
+                    </p:contextMenu>
+
+                </h:form>
+            </p:tab>
+            <p:tab title="Добавить тип">
+                <h:form>
+                    <p:remoteCommand id="myfun" name="myfun" action="#{legalDAO.addStatus}" />
+                    <p:panelGrid columns="2">
+                        <f:facet name="header">
+                            Тип организации
+                        </f:facet>
+                        <h:outputLabel for="category_name" value="Название: " />
+                        <p:inputText id="category_name" value="#{legalDAO.name}" label="Firstname" />
+                        <h:outputLabel for="category_description" value="Аббревиатура: " />
+                        <p:inputTextarea id="category_description" value="#{legalDAO.acronym}" label="Surname"/>
+                    </p:panelGrid>
+                    <br/>
+                    <h:commandButton value="Добавить" type="submit" onclick="myfun();"  />
+                </h:form>
+
+
+            </p:tab>
+        </p:accordionPanel>
+    </p:panel>
+</h:body>
+</html>

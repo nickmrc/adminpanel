@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+
+
+        <property name="hibernate.dialect"> org.hibernate.dialect.MySQLDialect</property>
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/bulls</property>
+
+        <property name="show_sql">true</property>
+        <!--<property name="hibernate.current_session_context_class">thread</property>-->
+        <!--<property name="hibernate.connection.datasource"></property>-->
+        <property name="hbm2ddl.auto">update</property>
+        <!--<property name="useUnicode">true</property>-->
+        <!--<property name="characterEncoding">utf8</property>-->
+
+
+        <property name="hibernate.connection.autocommit">true</property>
+
+        <property name="hibernate.connection.password">root</property>
+
+        <property name="hibernate.connection.username">root</property>
+
+        <property name="hibernate.connection.useUnicode">true</property>
+        <property name="hibernate.connection.characterEncoding">UTF-8</property>
+
+        <!--Мапинг Entity-классов-->
+        <mapping class="com.java.hibernate.core.entity.Category"/>
+        <mapping class="com.java.hibernate.core.entity.PriceList"/>
+        <mapping class="com.java.hibernate.core.entity.Good"/>
+        <mapping class="com.java.hibernate.core.entity.Size"/>
+        <mapping class="com.java.hibernate.core.entity.CountryProducer"/>
+        <mapping class="com.java.hibernate.core.entity.Color"/>
+        <mapping class="com.java.hibernate.core.entity.LegalStatus"/>
+        <mapping class="com.java.hibernate.core.entity.GoodInDelivery"/>
+        <mapping class="com.java.hibernate.core.entity.Delivery"/>
+
+        <mapping class="com.java.hibernate.core.entity.ContrAgent"/>
+
+    </session-factory>
+</hibernate-configuration>
